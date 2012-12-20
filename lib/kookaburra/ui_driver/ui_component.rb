@@ -106,7 +106,7 @@ class Kookaburra
       # Is the component's element found on the page and is it considered
       # "visible" by the browser driver.
       def visible?
-        visible = browser.has_css?(component_locator, :visible)
+        visible = browser.has_css?(component_locator, visible: true)
         unless visible
           detect_server_error!
         end
