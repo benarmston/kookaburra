@@ -20,6 +20,9 @@ class Kookaburra
       #   to the `UIComponent` on initialization.
       def ui_component(component_name, component_class, options = {})
         define_method(component_name) do
+          if self.is_a?(Kookaburra::UIDriver::UIComponent)
+            options[:parent_component] = self
+          end
           component_class.new(configuration, options)
         end
       end
