@@ -105,8 +105,11 @@ class Kookaburra
 
       # Is the component's element found on the page and is it considered
       # "visible" by the browser driver.
+      #
+      # If the component is a subcomponent, the check is scoped to within its
+      # parent component.
       def visible?
-        visible = browser.has_css?(component_locator, visible: true)
+        visible = parent_component.has_css?(component_locator, visible: true)
         unless visible
           detect_server_error!
         end
@@ -138,6 +141,13 @@ class Kookaburra
       #   an implementation
       def component_locator
         raise ConfigurationError, "You must define #{self.class.name}#component_locator."
+      end
+
+      # Return the component containing this component or {#browser}
+      #
+      # @return [Kookaburra::UIDriver::UIComponent] or {#browser}
+      def parent_component
+        options[:parent_component] || browser
       end
 
       # Runs the server error detection function specified in
