@@ -122,6 +122,15 @@ class Kookaburra
         "#{@app_host}#{component_path(*args)}"
       end
 
+      # @return [Capybara::Element] the DOM element that this UIComponent
+      #   represents.
+      #
+      # This is useful for being able to interact with the element directly or
+      # to make assertions directly on the element.
+      def element
+        parent_component.find(component_locator)
+      end
+
       protected
 
       # The browser object from the initialized configuration
