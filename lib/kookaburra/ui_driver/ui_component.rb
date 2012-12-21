@@ -99,7 +99,7 @@ class Kookaburra
         @browser = configuration.browser
         @app_host = configuration.app_host
         @server_error_detection = configuration.server_error_detection
-        scoped_browser = ScopedBrowser.new(@browser, lambda { component_locator })
+        scoped_browser = ScopedBrowser.new(@browser, lambda { nested_component_locator })
         super(scoped_browser)
       end
 
@@ -148,6 +148,17 @@ class Kookaburra
       # @return [Kookaburra::UIDriver::UIComponent] or {#browser}
       def parent_component
         options[:parent_component] || browser
+      end
+
+      # @return [String] the {component_locator} nested within its parent's
+      #   component_locator
+      def nested_component_locator
+        case parent_component
+        when Kookaburra::UIDriver::UIComponent
+          "#{parent_component.nested_component_locator} #{component_locator}"
+        else
+          component_locator
+        end
       end
 
       # Runs the server error detection function specified in
